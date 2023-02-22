@@ -1,0 +1,20 @@
+name: Java CI with Maven , reusable GHA workflow
+on:
+  workflow_dispatch:
+    inputs:
+      java-version:
+        description: java version to be used
+        required: true
+  push:
+    branches: [ "master" ]
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    permissions:
+      id-token: write
+      contents: read
+    uses: cnighojkar/myworkflows/.github/workflows/java-maven-build-test.yml@main
+    with:
+      java-version: ${{ github.event.inputs.java-version }}
+    secrets: inherit
