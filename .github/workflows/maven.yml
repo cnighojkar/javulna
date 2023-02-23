@@ -7,7 +7,7 @@ on:
         required: true
       app-name:
         description: application name
-        required: true
+        required: false
   push:
     branches: [ "master" ]
 permissions:
@@ -20,5 +20,5 @@ jobs:
     uses: cnighojkar/myworkflows/.github/workflows/java-maven-build-test.yml@main
     with:
       java-version: ${{ github.event.inputs.java-version }}
-      app-name: ${{ github.event.inputs.app-name }}
+      app-name: javulna-1.0-SNAPSHOT
     secrets: inherit
