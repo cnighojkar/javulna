@@ -5,16 +5,20 @@ on:
       java-version:
         description: java version to be used
         required: true
+      app-name:
+        description: application name
+        required: true
   push:
     branches: [ "master" ]
 permissions:
   contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 jobs:
   build-and-test:
-    permissions:
-      id-token: write
-      contents: read
     uses: cnighojkar/myworkflows/.github/workflows/java-maven-build-test.yml@main
     with:
       java-version: ${{ github.event.inputs.java-version }}
+      app-name: ${{ github.event.inputs.app-name }}
     secrets: inherit
