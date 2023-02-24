@@ -1,5 +1,3 @@
-
-
 # Javulna
 
 ## Table of Contents
