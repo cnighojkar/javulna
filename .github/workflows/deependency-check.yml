@@ -34,9 +34,10 @@ jobs:
       run: mvn org.owasp:dependency-check-maven:8.1.2:aggregate -Dformats=SARIF -Dodc.outputDirectory=${{ github.workspace }}
 
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v2.1.32
       with: 
         sarif_file: ${{ github.workspace }}/dependency-check-report.sarif
+
     # - name: Print CVE Summery on GITHUB_STEP_SUMMARY # https://miller.readthedocs.io/en/latest/
     #   shell: bash
     #   run: |
