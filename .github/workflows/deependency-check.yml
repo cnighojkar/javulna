@@ -1,7 +1,5 @@
 name: java-maven-dependency-check-action
 on:
-  # schedule:
-  #   - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:   
       java-version:
@@ -33,17 +31,21 @@ jobs:
       
     - name: Dependency check with org.owasp:dependency-check-maven
       shell: bash
-      run: mvn dependency-check:check -Dformat=CSV
-    
-    - name: Print CVE Summery on GITHUB_STEP_SUMMARY # https://miller.readthedocs.io/en/latest/
-      shell: bash
-      run: |
-        docker run --rm -i jauderho/miller:latest --omd --icsv cut -f CVE,Identifiers,CVSSv2_Severity < target/dependency-check-report.csv >> $GITHUB_STEP_SUMMARY
-        echo >> $GITHUB_STEP_SUMMARY
-        echo "Download the Artifact dependency-check-report to see more details" >> $GITHUB_STEP_SUMMARY
-        
-    - name: Archive dependency-check-report as artifact
-      uses: actions/upload-artifact@v3
+      run: mvn org.owasp:dependency-check-maven:8.1.2:aggregate -Dformats=SARIF -Dodc.outputDirectory=${{ github.workspace }}
+
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
       with:
-        name: dependency-check-report
-        path: ${{ github.workspace }}/target/dependency-check-report.csv
+        sarif_file: dependency-check-report.sarif
+    # - name: Print CVE Summery on GITHUB_STEP_SUMMARY # https://miller.readthedocs.io/en/latest/
+    #   shell: bash
+    #   run: |
+    #     docker run --rm -i jauderho/miller:latest --omd --icsv cut -f CVE,Identifiers,CVSSv2_Severity < target/dependency-check-report.csv >> $GITHUB_STEP_SUMMARY
+    #     echo >> $GITHUB_STEP_SUMMARY
+    #     echo "Download the Artifact dependency-check-report to see more details" >> $GITHUB_STEP_SUMMARY
+        
+    # - name: Archive dependency-check-report as artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: dependency-check-report
+    #     path: ${{ github.workspace }}/target/dependency-check-report.csv
